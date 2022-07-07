@@ -1,6 +1,6 @@
   view: order_details_summary {
     derived_table: {
-      explore_source: order_items {
+      explore_source: public.order_items {
         column: order_id {}
         column: id { field: users.id }
         column: count {}
