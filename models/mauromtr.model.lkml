@@ -3,12 +3,10 @@ connection: "thelook"
 # include all the views
 include: "/views/**/*.view"
 
-datagroup: mauromtr_default_datagroup {
-  # sql_trigger: SELECT MAX(id) FROM etl_log;;
+datagroup: order_items_datagroup {
+  sql_trigger: SELECT MAX(order_item_id) from order_items ;;
   max_cache_age: "1 hour"
 }
-
-persist_with: mauromtr_default_datagroup
 
 explore: inventory_items {
   join: products {
@@ -19,6 +17,7 @@ explore: inventory_items {
 }
 
 explore: order_items {
+  persist_with: order_items_datagroup
   conditionally_filter: {
     filters: [order_items.sale_price: "69"]
     unless: [order_id, orders.created_date]
