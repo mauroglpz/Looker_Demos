@@ -1,19 +1,18 @@
   view: order_details_summary {
-    derived_table: {
-      explore_source: public.order_items {
-        column: order_id {}
-        column: id { field: users.id }
-        column: count {}
+      derived_table: {
+        explore_source: order_items {
+          column: order_id {}
+          column: count {}
+          column: id { field: users.id }
+        }
       }
-      datagroup_trigger: mauromtr_default_datagroup
+      dimension: order_id {
+        type: number
+      }
+      dimension: count {
+        type: number
+      }
+      dimension: id {
+        type: number
+      }
     }
-    dimension: order_id {
-      type: number
-    }
-    dimension: id {
-      type: number
-    }
-    dimension: count {
-      type: number
-    }
-  }
