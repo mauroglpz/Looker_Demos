@@ -19,6 +19,11 @@ explore: inventory_items {
 }
 
 explore: order_items {
+  conditionally_filter: {
+    filters: [order_items.sale_price: "69"]
+    unless: [order_id, orders.created_date]
+  }
+
   join: orders {
     type: left_outer
     sql_on: ${order_items.order_id} = ${orders.id} ;;
