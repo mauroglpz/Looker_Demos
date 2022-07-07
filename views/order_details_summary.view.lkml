@@ -5,6 +5,7 @@
         column: id { field: users.id }
         column: count {}
       }
+      datagroup_trigger: mauromtr_default_datagroup
     }
     dimension: order_id {
       type: number
