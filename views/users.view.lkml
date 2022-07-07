@@ -79,7 +79,7 @@ view: users {
   }
 
   measure: average_age {
-    type: number
-    sql: ${TABLE}.age/${count} ;;
+    type: average
+    sql: ${TABLE}.age;;
   }
 }
