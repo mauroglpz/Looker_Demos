@@ -18,10 +18,6 @@ explore: inventory_items {
 
 explore: order_items {
   persist_with: order_items_datagroup
-  conditionally_filter: {
-    filters: [order_items.sale_price: "69"]
-    unless: [order_id, orders.created_date]
-  }
 
   join: orders {
     type: left_outer
