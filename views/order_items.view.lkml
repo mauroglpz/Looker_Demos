@@ -63,4 +63,17 @@ view: order_items {
           {% endif %}
           ;;
   }
+
+# ----- Sets of fields for drilling ------
+  set: detail {
+    fields: [
+      order_id,
+      users.last_name,
+      users.id,
+      users.first_name,
+      inventory_items.id,
+      inventory_items.product_name
+    ]
+  }
+
 }
