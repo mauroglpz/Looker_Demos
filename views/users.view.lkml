@@ -116,4 +116,16 @@ view: users {
     type: average
     sql: ${TABLE}.age;;
   }
+
+# ----- Sets of fields for drilling ------
+  set: detail {
+    fields: [
+      users.last_name,
+      users.id,
+      users.first_name,
+      inventory_items.id,
+      inventory_items.product_name
+    ]
+  }
+
 }
