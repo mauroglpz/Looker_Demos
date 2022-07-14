@@ -18,6 +18,7 @@ view: user_facts {
     }
 
     dimension: user_id {
+      primary_key: yes
       type: number
       sql: ${TABLE}.user_id ;;
     }
@@ -42,14 +43,15 @@ view: user_facts {
       sql: ${TABLE}.latest_order_returned ;;
     }
 
-  measure: average_total_revenue {
-    type: average
-    sql: ${TABLE}.total_revenue ;;
-  }
-  measure: average_lifetime_order_count {
-    type: average
-    sql: ${TABLE}.lifetime_order_count ;;
-  }
+    measure: average_total_revenue {
+      type: average
+      sql: ${TABLE}.total_revenue ;;
+    }
+
+    measure: average_lifetime_order_count {
+      type: average
+      sql: ${TABLE}.lifetime_order_count ;;
+    }
 
     set: detail {
       fields: [user_id,
