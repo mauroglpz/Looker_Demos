@@ -72,7 +72,7 @@ view: order_items {
       users.id,
       users.first_name,
       inventory_items.id,
-      inventory_items.product_name
+      products.item_name
     ]
   }
 
