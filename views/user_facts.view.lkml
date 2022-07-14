@@ -42,6 +42,15 @@ view: user_facts {
       sql: ${TABLE}.latest_order_returned_date ;;
     }
 
+  measure: average_total_revenue {
+    type: average
+    sql: ${TABLE}.total_revenue ;;
+  }
+  measure: average_lifetime_order_count {
+    type: average
+    sql: ${TABLE}.lifetime_order_count ;;
+  }
+
     set: detail {
       fields: [user_id, lifetime_order_count, total_revenue, first_order_returned_date_time, latest_order_returned_date_time]
     }
