@@ -3,10 +3,12 @@ connection: "thelook"
 # include all the views
 include: "/views/**/*.view"
 
-datagroup: order_items_datagroup {
-  sql_trigger: SELECT MAX(order_item_id) from order_items ;;
+datagroup: mauromtr_default_datagroup {
+  # sql_trigger: SELECT MAX(id) FROM etl_log;;
   max_cache_age: "1 hour"
 }
+
+persist_with: mauromtr_default_datagroup
 
 explore: inventory_items {
   join: products {
@@ -17,7 +19,6 @@ explore: inventory_items {
 }
 
 explore: order_items {
-  persist_with: order_items_datagroup
 
   join: orders {
     type: left_outer

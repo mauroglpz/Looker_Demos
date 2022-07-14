@@ -2,6 +2,35 @@ view: order_items {
   sql_table_name: public.order_items ;;
   drill_fields: [id]
 
+  parameter: select_timeframe {
+    type: unquoted
+    default_value: "created_month"
+    allowed_value: {
+      label: "Date"
+      value: "created_date"
+    }
+    allowed_value: {
+      label: "Week"
+      value: "created_week"
+    }
+    allowed_value: {
+      label: "Month"
+      value: "created_month"
+    }
+  }
+
+  dimension: dynamic_timeframe {
+    label_from_parameter: select_timeframe
+    type: string
+    sql: {% if select_timeframe._parameter_value == 'created_date' %}
+    ${inventory_items.created_date}
+    {% elsif select_timeframe._parameter_value == 'created_week'  %}
+    ${inventory_items.created_week}
+    {% else %}
+    ${inventory_items.created_month}
+    {% endif %};;
+  }
+
   dimension: id {
     primary_key: yes
     type: number
