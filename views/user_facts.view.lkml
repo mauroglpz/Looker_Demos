@@ -3,8 +3,8 @@ view: user_facts {
       sql: SELECT user_id AS user_id
           ,COUNT(distinct order_items.order_id) AS lifetime_order_count
           ,SUM(order_items.sale_price) AS total_revenue
-          ,MIN(order_items.returned_at) AS first_order_returned_date
-          ,MAX(order_items.returned_at) AS latest_order_returned_date
+          ,MIN(order_items.returned_at) AS first_order_returned
+          ,MAX(order_items.returned_at) AS latest_order_returned
       FROM public.order_items AS order_items
       LEFT JOIN public.orders AS orders ON order_items.order_id = orders.id
       LEFT JOIN public.users AS users ON orders.user_id = users.id
@@ -32,14 +32,14 @@ view: user_facts {
       sql: ${TABLE}.total_revenue ;;
     }
 
-    dimension_group: first_order_returned_date {
+    dimension_group: first_order_returned {
       type: time
-      sql: ${TABLE}.first_order_returned_date ;;
+      sql: ${TABLE}.first_order_returned ;;
     }
 
-    dimension_group: latest_order_returned_date {
+    dimension_group: latest_order_returned {
       type: time
-      sql: ${TABLE}.latest_order_returned_date ;;
+      sql: ${TABLE}.latest_order_returned ;;
     }
 
   measure: average_total_revenue {
@@ -52,6 +52,10 @@ view: user_facts {
   }
 
     set: detail {
-      fields: [user_id, lifetime_order_count, total_revenue, first_order_returned_date_time, latest_order_returned_date_time]
+      fields: [user_id,
+        lifetime_order_count,
+        total_revenue,
+        first_order_returned_time,
+        latest_order_returned_time]
     }
   }
