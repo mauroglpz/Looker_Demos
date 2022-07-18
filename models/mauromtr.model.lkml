@@ -19,6 +19,10 @@ explore: inventory_items {
 }
 
 explore: order_items {
+  fields: [ALL_FIELDS*]
+  from: order_items
+  view_name: order_items
+  extends: [base_orders]
 
   join: orders {
     type: left_outer
@@ -29,12 +33,6 @@ explore: order_items {
   join: inventory_items {
     type: left_outer
     sql_on: ${order_items.inventory_item_id} = ${inventory_items.id} ;;
-    relationship: many_to_one
-  }
-
-  join: users {
-    type: left_outer
-    sql_on: ${orders.user_id} = ${users.id} ;;
     relationship: many_to_one
   }
 
@@ -57,12 +55,20 @@ explore: order_items {
   }
 }
 
-explore: orders {
+explore: base_orders {
+  extension: required
   join: users {
     type: left_outer
     sql_on: ${orders.user_id} = ${users.id} ;;
     relationship: many_to_one
   }
+}
+
+explore: orders {
+  fields: [ALL_FIELDS*]
+  from: orders
+  view_name: orders
+  extends: [base_orders]
 }
 
 explore: product_facts {

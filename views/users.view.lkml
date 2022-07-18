@@ -1,4 +1,7 @@
+include: "location.view"
+
 view: users {
+  extends: [location]
   sql_table_name: public.users ;;
   drill_fields: [id]
 
@@ -32,11 +35,6 @@ view: users {
     sql: ${age} ;;
   }
 
-  dimension: city {
-    type: string
-    sql: ${TABLE}.city ;;
-  }
-
   dimension: city_link {
     type: string
     sql: ${TABLE}.city ;;
@@ -45,12 +43,6 @@ view: users {
       url: "http://www.google.com/search?q={{ value | url_encode }}"
       icon_url: "http://www.google.com/s2/favicons?domain=www.{{ value | url_encode }}.com"
     }
-  }
-
-  dimension: country {
-    type: string
-    map_layer_name: countries
-    sql: ${TABLE}.country ;;
   }
 
   dimension_group: created {
@@ -87,11 +79,6 @@ view: users {
     sql: ${TABLE}.last_name ;;
   }
 
-  dimension: state {
-    type: string
-    sql: ${TABLE}.state ;;
-  }
-
   dimension: state_link {
     type: string
     sql: ${TABLE}.state ;;
@@ -106,11 +93,6 @@ view: users {
   dimension: traffic_source {
     type: string
     sql: ${TABLE}.traffic_source ;;
-  }
-
-  dimension: zip {
-    type: zipcode
-    sql: ${TABLE}.zip ;;
   }
 
   dimension: order_history_button {
