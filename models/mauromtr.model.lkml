@@ -3,10 +3,13 @@ connection: "thelook"
 # include all the views
 include: "/views/**/*.view"
 
-datagroup: order_items_datagroup {
-  sql_trigger: SELECT MAX(order_item_id) from order_items ;;
+datagroup: mauromtr_default_datagroup {
+  # sql_trigger: SELECT MAX(id) FROM etl_log;;
   max_cache_age: "1 hour"
 }
+
+
+persist_with: mauromtr_default_datagroup
 
 explore: inventory_items {
   join: products {
@@ -17,11 +20,10 @@ explore: inventory_items {
 }
 
 explore: order_items {
-  persist_with: order_items_datagroup
-  conditionally_filter: {
-    filters: [order_items.sale_price: "69"]
-    unless: [order_id, orders.created_date]
-  }
+  fields: [ALL_FIELDS*]
+  from: order_items
+  view_name: order_items
+  extends: [base_orders]
 
   join: orders {
     type: left_outer
@@ -35,25 +37,39 @@ explore: order_items {
     relationship: many_to_one
   }
 
-  join: users {
-    type: left_outer
-    sql_on: ${orders.user_id} = ${users.id} ;;
-    relationship: many_to_one
-  }
-
   join: products {
     type: left_outer
     sql_on: ${inventory_items.product_id} = ${products.id} ;;
     relationship: many_to_one
   }
+
+  join: user_facts {
+    type: left_outer
+    sql_on: ${order_items.user_id} = ${user_facts.user_id};;
+    relationship: many_to_one
+  }
+
+  join: brand_order_facts {
+    type: left_outer
+    sql_on: ${products.brand} = ${brand_order_facts.brand} ;;
+    relationship: many_to_one
+  }
 }
 
-explore: orders {
+explore: base_orders {
+  extension: required
   join: users {
     type: left_outer
     sql_on: ${orders.user_id} = ${users.id} ;;
     relationship: many_to_one
   }
+}
+
+explore: orders {
+  fields: [ALL_FIELDS*]
+  from: orders
+  view_name: orders
+  extends: [base_orders]
 }
 
 explore: product_facts {

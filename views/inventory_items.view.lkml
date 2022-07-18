@@ -24,6 +24,8 @@ view: inventory_items {
       quarter,
       year
     ]
+    convert_tz: no
+    datatype: date
     sql: ${TABLE}.created_at ;;
   }
 

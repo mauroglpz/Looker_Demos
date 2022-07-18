@@ -1,6 +1,21 @@
+include: "location.view"
+
 view: users {
+  extends: [location]
   sql_table_name: public.users ;;
   drill_fields: [id]
+
+  filter: select_traffic_source {
+    type: string
+    suggest_explore: order_items
+    suggest_dimension: users.traffic_source
+  }
+
+  dimension: hidden_traffic_source_filter {
+    hidden: yes
+    type: yesno
+    sql: {% condition select_traffic_source %} ${traffic_source} {% endcondition %} ;;
+  }
 
   dimension: id {
     primary_key: yes
@@ -20,15 +35,14 @@ view: users {
     sql: ${age} ;;
   }
 
-  dimension: city {
+  dimension: city_link {
     type: string
     sql: ${TABLE}.city ;;
-  }
-
-  dimension: country {
-    type: string
-    map_layer_name: countries
-    sql: ${TABLE}.country ;;
+    link: {
+      label: "Search the web"
+      url: "http://www.google.com/search?q={{ value | url_encode }}"
+      icon_url: "http://www.google.com/s2/favicons?domain=www.{{ value | url_encode }}.com"
+    }
   }
 
   dimension_group: created {
@@ -65,9 +79,15 @@ view: users {
     sql: ${TABLE}.last_name ;;
   }
 
-  dimension: state {
+  dimension: state_link {
     type: string
     sql: ${TABLE}.state ;;
+    map_layer_name: us_states
+    html: {% if _explore._name == "order_items" %}
+          <a href="/explore/mauromtr/order_items?fields=order_items.detail*&f[users.state]= {{ value }}">{{ value }}</a>
+        {% else %}
+          <a href="/explore/mauromtr/users?fields=users.detail*&f[users.state]={{ value }}">{{ value }}</a>
+        {% endif %} ;;
   }
 
   dimension: traffic_source {
@@ -75,9 +95,16 @@ view: users {
     sql: ${TABLE}.traffic_source ;;
   }
 
-  dimension: zip {
-    type: zipcode
-    sql: ${TABLE}.zip ;;
+  dimension: order_history_button {
+    type: string
+    sql: ${TABLE}.id ;;
+    html: <a href="/explore/mauromtr/order_items?fields=order_items.order_id, users.first_name, users.last_name, users.id, order_items.count, order_items.total_revenue&f[users.id]={{ value }}"><button>Order History</button></a> ;;
+  }
+
+  measure: dynamic_count {
+    type: count_distinct
+    sql: ${id} ;;
+    filters: [ hidden_traffic_source_filter: "Yes" ]
   }
 
   measure: count {
@@ -89,4 +116,16 @@ view: users {
     type: average
     sql: ${TABLE}.age;;
   }
+
+# ----- Sets of fields for drilling ------
+  set: detail {
+    fields: [
+      users.last_name,
+      users.id,
+      users.first_name,
+      inventory_items.id,
+      inventory_items.product_name
+    ]
+  }
+
 }
