@@ -81,12 +81,12 @@ view: users {
 
   dimension: full_name {
     type: string
-    sql: concat(${first_name},' ',${last_name}) ;;
+    sql: concat(${TABLE}.first_name, " ", ${TABLE}.last_name) ;;
   }
 
   dimension: full_name_length {
     type: string
-    sql: length(${full_name}) ;;
+    sql: length(${TABLE}.full_name) ;;
   }
 
   dimension: state_link {
