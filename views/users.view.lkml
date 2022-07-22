@@ -81,7 +81,7 @@ view: users {
 
   dimension: full_name {
     type: string
-    sql: concat(${first_name},' ',${last_name}) ;;
+    sql: concat(${TABLE}.first_name,${TABLE}.last_name) ;;
   }
 
   dimension: full_name_length {
@@ -125,6 +125,7 @@ view: users {
   measure: average_age {
     type: average
     sql: ${TABLE}.age;;
+    value_format: "0.0"
   }
 
 # ----- Sets of fields for drilling ------
