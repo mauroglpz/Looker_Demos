@@ -1,5 +1,6 @@
 view: inventory_items {
-  sql_table_name: demo_db.inventory_items ;;
+
+  sql_table_name: public.inventory_items ;;
   drill_fields: [id]
 
   dimension: id {
@@ -24,6 +25,8 @@ view: inventory_items {
       quarter,
       year
     ]
+    convert_tz: no
+    datatype: date
     sql: ${TABLE}.created_at ;;
   }
 
@@ -49,6 +52,6 @@ view: inventory_items {
 
   measure: count {
     type: count
-    drill_fields: [id, products.id, products.item_name, order_items.count, order_items_vijaya.count]
+    drill_fields: [id, products.id, products.item_name, order_items.count]
   }
 }

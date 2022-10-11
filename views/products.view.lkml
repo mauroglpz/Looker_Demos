@@ -1,6 +1,26 @@
 view: products {
-  sql_table_name: demo_db.products ;;
+
+  sql_table_name: public.products ;;
   drill_fields: [id]
+
+  filter: select_category {
+    type: string
+    suggest_explore: order_items
+    suggest_dimension: products.category
+  }
+
+  dimension: category_comparison {
+    type: string
+    sql:
+      CASE
+      WHEN {% condition select_category %}
+        ${category}
+        {% endcondition %}
+      THEN ${category}
+      ELSE 'All Other Categories'
+      END
+      ;;
+  }
 
   dimension: id {
     primary_key: yes
@@ -45,6 +65,6 @@ view: products {
 
   measure: count {
     type: count
-    drill_fields: [id, item_name, inventory_items.count]
+    drill_fields: [id, item_name, inventory_items.count, product_facts.count]
   }
 }
